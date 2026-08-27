@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { Routes, Route, Navigate } from 'react-router-dom';  // ← Remove BrowserRouter import
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
@@ -13,14 +12,14 @@ import IssueBook from './pages/IssueBook';
 import ReturnBook from './pages/ReturnBook';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
-import Analytics from './pages/Analytics'
+import Analytics from './pages/Analytics';
 
 function App() {
   return (
     <AuthProvider>
       <div className="min-h-screen bg-gray-100">
         <Navbar />
-        <Routes>  {/* ← Only Routes, NO Router */}
+        <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route 
@@ -79,11 +78,16 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          // Add routes
-           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-           <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-           <Route path="/" element={<Navigate to="/dashboard" />} />
-           </Routes>
+          <Route 
+            path="/analytics" 
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <Analytics />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+        </Routes>
       </div>
     </AuthProvider>
   );
