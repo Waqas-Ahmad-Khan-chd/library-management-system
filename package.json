@@ -1,7 +1,6 @@
 {
   "name": "library-management-system",
   "version": "1.0.0",
-  "description": "Library Management System MERN Stack",
   "scripts": {
     "vercel-build": "cd client && npm install && npm run build"
   },
