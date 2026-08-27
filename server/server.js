@@ -6,8 +6,6 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 
 dotenv.config();
-
-// Connect to MongoDB
 connectDB();
 
 const app = express();
@@ -29,10 +27,10 @@ app.get('/api/test', (req, res) => {
   res.json({ message: '✅ Library API is running!' });
 });
 
-// ✅ Serve frontend static files
+// ✅ SERVE FRONTEND STATIC FILES
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
-// ✅ Handle all other routes - serve index.html
+// ✅ ALL OTHER ROUTES GO TO index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
