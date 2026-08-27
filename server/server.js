@@ -1,15 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 
 dotenv.config();
+
+// Connect to MongoDB
 connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 
@@ -20,19 +24,25 @@ app.use('/api/books', require('./routes/book.routes'));
 app.use('/api/transactions', require('./routes/transaction.routes'));
 app.use('/api/analytics', require('./routes/analytics.routes'));
 
+// Test Route
 app.get('/api/test', (req, res) => {
   res.json({ message: '✅ Library API is running!' });
 });
 
-// Root route
-app.get('/', (req, res) => {
-  res.json({ message: '📚 Library Management System API', version: '1.0.0' });
+// ✅ Serve frontend static files
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// ✅ Handle all other routes - serve index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
-// ✅ EXPORT for Vercel (MUST be here)
+// Export for Vercel
 module.exports = app;
 
-// ✅ Local development only
+// Local development
 if (require.main === module) {
-  app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
 }
