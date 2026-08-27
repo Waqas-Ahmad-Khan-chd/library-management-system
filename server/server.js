@@ -6,6 +6,8 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 
 dotenv.config();
+
+// Connect to MongoDB
 connectDB();
 
 const app = express();
@@ -27,12 +29,17 @@ app.get('/api/test', (req, res) => {
   res.json({ message: '✅ Library API is running!' });
 });
 
-// ✅ SERVE FRONTEND STATIC FILES
-app.use(express.static(path.join(__dirname, '../client/dist')));
+// ✅ Serve frontend static files
+const distPath = path.join(__dirname, '..', 'client', 'dist');
+console.log('📁 Serving static files from:', distPath);
 
-// ✅ ALL OTHER ROUTES GO TO index.html
+app.use(express.static(distPath));
+
+// ✅ All other routes - serve index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+  const indexPath = path.join(distPath, 'index.html');
+  console.log('📄 Serving index.html from:', indexPath);
+  res.sendFile(indexPath);
 });
 
 // Export for Vercel
