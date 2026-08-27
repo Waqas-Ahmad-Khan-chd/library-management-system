@@ -1,10 +1,12 @@
 {
   "name": "library-management-system",
   "version": "1.0.0",
+  "description": "Library Management System",
   "scripts": {
-    "vercel-build": "cd client && npm install && npm run build"
+    "start": "node server/server.js",
+    "build": "cd client && npm install && npm run build"
   },
   "engines": {
-    "node": "24.x"
+    "node": "18.x"
   }
 }
