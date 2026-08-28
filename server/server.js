@@ -10,7 +10,7 @@ const app = express();
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 
-// ✅ MongoDB Connection
+// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => console.error('❌ MongoDB Error:', err.message));
@@ -30,7 +30,14 @@ app.get('/favicon.ico', (req, res) => {
   res.status(204).end();
 });
 
-// ✅ Export for Vercel
+// ✅ ALL ROUTES
+app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/api/users', require('./routes/user.routes'));
+app.use('/api/books', require('./routes/book.routes'));
+app.use('/api/transactions', require('./routes/transaction.routes'));
+app.use('/api/analytics', require('./routes/analytics.routes'));
+
+// Export for Vercel
 module.exports = app;
 
 // Local development
