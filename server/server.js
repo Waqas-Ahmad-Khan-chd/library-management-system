@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -20,15 +21,11 @@ app.get('/api/test', (req, res) => {
   res.json({ message: '✅ Library API is running!' });
 });
 
-// Root Route
-app.get('/', (req, res) => {
-  res.json({ message: '📚 Library Management System API' });
-});
+// ✅ SERVE FRONTEND STATIC FILES
+const distPath = path.join(__dirname, '..', 'client', 'dist');
+console.log('📁 Serving static files from:', distPath);
 
-// Handle favicon.ico
-app.get('/favicon.ico', (req, res) => {
-  res.status(204).end();
-});
+app.use(express.static(distPath));
 
 // ✅ ALL ROUTES
 try {
@@ -47,6 +44,13 @@ try {
 } catch (error) {
   console.error('❌ Error loading routes:', error.message);
 }
+
+// ✅ ALL OTHER ROUTES - SERVE index.html
+app.get('*', (req, res) => {
+  const indexPath = path.join(distPath, 'index.html');
+  console.log('📄 Serving index.html from:', indexPath);
+  res.sendFile(indexPath);
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
