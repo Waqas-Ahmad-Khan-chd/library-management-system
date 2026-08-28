@@ -12,7 +12,7 @@ const authMiddleware = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default_secret_for_dev');
     const user = await User.findById(decoded.id).select('-password');
     
     if (!user) {
@@ -32,7 +32,6 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-// Role middleware - only checks roles for specific routes
 const roleMiddleware = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
