@@ -9,7 +9,7 @@ router.get('/profile', authMiddleware, userController.getProfile);
 router.put('/profile', authMiddleware, userController.updateProfile);
 router.put('/change-password', authMiddleware, userController.changePassword);
 
-// Admin routes
+// Get all users (Admin & Librarian only)
 router.get('/', authMiddleware, roleMiddleware('admin', 'librarian'), async (req, res) => {
   try {
     const users = await User.find().select('-password');
