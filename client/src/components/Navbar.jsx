@@ -24,10 +24,10 @@ const Navbar = () => {
 
   return (
     <nav className="bg-gradient-to-r from-slate-800 via-slate-900 to-slate-800 text-white shadow-2xl sticky top-0 z-50 border-b border-white/10">
-      <div className="container-modern">
+      <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-3">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
               <HiOutlineLibrary className="text-2xl text-white" />
             </div>
@@ -38,53 +38,53 @@ const Navbar = () => {
           </Link>
           
           {user ? (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2 md:gap-4">
               {/* User Badge */}
-              <div className="hidden md:flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full border border-white/5">
-                <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-xs font-bold text-white">
+              <div className="hidden md:flex items-center gap-3 bg-white/10 px-4 py-2 rounded-full border border-white/5">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-sm font-bold text-white">
                   {user.name?.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-sm font-medium text-white">{user.name}</span>
-                <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full text-white capitalize">{user.role}</span>
+                <span className="text-xs bg-white/20 px-3 py-1 rounded-full text-white capitalize">{user.role}</span>
               </div>
 
               {/* Nav Links */}
-              <Link to="/dashboard" className="nav-link text-white/80 hover:text-white">
+              <Link to="/dashboard" className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
                 <MdDashboard className="text-lg" />
-                <span className="hidden lg:inline">Dashboard</span>
+                <span>Dashboard</span>
               </Link>
               
-              <Link to="/books" className="nav-link text-white/80 hover:text-white">
+              <Link to="/books" className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
                 <FaBookOpen className="text-lg" />
-                <span className="hidden lg:inline">Books</span>
+                <span>Books</span>
               </Link>
               
-              <Link to="/profile" className="nav-link text-white/80 hover:text-white">
+              <Link to="/profile" className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
                 <FaUser className="text-lg" />
-                <span className="hidden lg:inline">Profile</span>
+                <span>Profile</span>
               </Link>
               
               {user && user.role === 'admin' && (
-                <Link to="/admin" className="nav-link text-white/80 hover:text-white">
+                <Link to="/admin" className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
                   <FaUserCog className="text-lg" />
-                  <span className="hidden lg:inline">Admin</span>
+                  <span>Admin</span>
                 </Link>
               )}
               
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 bg-red-500/20 hover:bg-red-500/30 px-4 py-2 rounded-xl transition font-medium text-sm border border-red-500/20 text-white"
+                className="flex items-center gap-2 bg-red-500/20 hover:bg-red-500/30 px-5 py-2 rounded-xl transition font-medium text-sm border border-red-500/20 text-white"
               >
                 <FaSignOutAlt className="text-sm" />
-                <span className="hidden md:inline">Logout</span>
+                <span>Logout</span>
               </button>
             </div>
           ) : (
             <div className="flex items-center gap-3">
-              <Link to="/login" className="px-4 py-2 rounded-xl hover:bg-white/10 transition text-sm font-medium text-white/80 hover:text-white">
+              <Link to="/login" className="px-5 py-2 rounded-xl hover:bg-white/10 transition text-sm font-medium text-white/80 hover:text-white">
                 Sign In
               </Link>
-              <Link to="/register" className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl transition text-sm font-medium text-white">
+              <Link to="/register" className="px-5 py-2 bg-white/20 hover:bg-white/30 rounded-xl transition text-sm font-medium text-white">
                 Get Started
               </Link>
             </div>
