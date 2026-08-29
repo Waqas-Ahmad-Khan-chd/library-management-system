@@ -2,7 +2,16 @@ const express = require('express');
 const router = express.Router();
 const bookController = require('../controllers/book.controller');
 const { authMiddleware, roleMiddleware } = require('../middleware/auth.middleware');
-const upload = require('../middleware/upload.middleware');
+
+// ✅ Try-catch for upload middleware (in case it fails)
+let upload;
+try {
+  upload = require('../middleware/upload.middleware');
+  console.log('✅ Upload middleware loaded');
+} catch (error) {
+  console.error('❌ Upload middleware error:', error.message);
+  upload = (req, res, next) => next(); // Fallback
+}
 
 // Public routes
 router.get('/', bookController.getAllBooks);

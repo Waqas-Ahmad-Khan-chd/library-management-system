@@ -4,8 +4,15 @@ const fs = require('fs');
 
 // Create uploads directory if it doesn't exist
 const uploadDir = path.join(__dirname, '..', 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+
+// ✅ Try-catch for directory creation
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+    console.log('📁 Uploads directory created');
+  }
+} catch (error) {
+  console.error('❌ Error creating uploads directory:', error.message);
 }
 
 // Configure storage
@@ -37,6 +44,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+// ✅ Create multer instance with error handling
 const upload = multer({
   storage: storage,
   limits: {

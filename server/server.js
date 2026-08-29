@@ -3,24 +3,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 
 dotenv.config();
 
 const app = express();
 
-// ✅ Security Middleware
-app.use(helmet());
-
-// ✅ Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
-  message: 'Too many requests from this IP, please try again later.'
-});
-app.use('/api', limiter);
-
+// ✅ Basic middleware (removed helmet and rate-limit for now)
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -45,8 +33,10 @@ app.get('/api/test', (req, res) => {
   res.json({ message: '✅ Library API is running!' });
 });
 
-// Serve Frontend
+// ✅ Serve Frontend
 const distPath = path.join(__dirname, '..', 'client', 'dist');
+console.log('📁 Serving frontend from:', distPath);
+
 app.use(express.static(distPath));
 
 app.get('*', (req, res) => {

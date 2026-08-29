@@ -57,14 +57,20 @@ const AddBook = () => {
         formDataToSend.append('file', formData.file);
       }
 
-      await createBook(formDataToSend);
+      // ✅ Don't set Content-Type header - browser will set it with boundary
+      const response = await axios.post('/api/books', formDataToSend, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       
       setSuccess('✅ Book added successfully!');
       setTimeout(() => {
         navigate('/books');
       }, 2000);
     } catch (error) {
-      setError(error.message || 'Failed to add book');
+      console.error('Add book error:', error);
+      setError(error.response?.data?.message || 'Failed to add book');
     } finally {
       setLoading(false);
     }
