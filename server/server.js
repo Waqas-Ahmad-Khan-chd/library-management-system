@@ -3,46 +3,57 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 dotenv.config();
 
 const app = express();
 
+// ✅ Security Middleware
+app.use(helmet());
+
+// ✅ Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  message: 'Too many requests from this IP, please try again later.'
+});
+app.use('/api', limiter);
+
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ✅ Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => console.error('❌ MongoDB Error:', err.message));
 
-// ✅ API Routes
+// API Routes
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/books', require('./routes/book.routes'));
 app.use('/api/transactions', require('./routes/transaction.routes'));
 app.use('/api/analytics', require('./routes/analytics.routes'));
 
-// ✅ Test Route
+// Test Route
 app.get('/api/test', (req, res) => {
   res.json({ message: '✅ Library API is running!' });
 });
 
-// ✅ SERVE FRONTEND - THIS IS WHAT WAS MISSING
+// Serve Frontend
 const distPath = path.join(__dirname, '..', 'client', 'dist');
-console.log('📁 Serving frontend from:', distPath);
-
-// Serve static files
 app.use(express.static(distPath));
 
-// ✅ All non-API routes go to index.html
 app.get('*', (req, res) => {
-  const indexPath = path.join(distPath, 'index.html');
-  console.log('📄 Serving:', indexPath);
-  res.sendFile(indexPath);
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
-// ✅ Error handling
+// Error handling
 app.use((err, req, res, next) => {
   console.error('❌ Server Error:', err.message);
   res.status(500).json({

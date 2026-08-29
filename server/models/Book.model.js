@@ -47,23 +47,25 @@ const BookSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  // ✅ File upload fields
+  fileUrl: {
+    type: String,
+    default: ''
+  },
+  fileName: {
+    type: String,
+    default: ''
+  },
+  fileSize: {
+    type: Number,
+    default: 0
+  },
   image: {
     type: String,
     trim: true
   }
 }, {
   timestamps: true
-});
-
-// Update available count when quantity changes
-BookSchema.pre('save', function(next) {
-  if (this.isModified('quantity')) {
-    const difference = this.quantity - this.available;
-    if (difference > 0) {
-      this.available = this.quantity;
-    }
-  }
-  next();
 });
 
 module.exports = mongoose.model('Book', BookSchema);

@@ -1,13 +1,12 @@
 const Book = require('../models/Book.model');
 
-// Get all books with search
+// Get all books
 exports.getAllBooks = async (req, res) => {
   try {
     const { search, category } = req.query;
     
     let query = {};
     
-    // Search by title or author
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
@@ -16,12 +15,9 @@ exports.getAllBooks = async (req, res) => {
       ];
     }
     
-    // Filter by category
     if (category) {
       query.category = category;
     }
-    
-    console.log('Book query:', query);
     
     const books = await Book.find(query).sort({ createdAt: -1 });
     
@@ -31,7 +27,6 @@ exports.getAllBooks = async (req, res) => {
       books
     });
   } catch (error) {
-    console.error('Get books error:', error);
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to fetch books'
@@ -63,7 +58,7 @@ exports.getBookById = async (req, res) => {
   }
 };
 
-// Create new book
+// Create new book with file upload
 exports.createBook = async (req, res) => {
   try {
     const { title, author, isbn, category, quantity, publisher, publicationYear, location } = req.body;
@@ -76,7 +71,12 @@ exports.createBook = async (req, res) => {
         message: 'Book with this ISBN already exists'
       });
     }
-    
+
+    // Get uploaded file info
+    const fileUrl = req.file ? `/uploads/${req.file.filename}` : '';
+    const fileName = req.file ? req.file.originalname : '';
+    const fileSize = req.file ? req.file.size : 0;
+
     const book = await Book.create({
       title,
       author,
@@ -86,9 +86,12 @@ exports.createBook = async (req, res) => {
       available: quantity || 1,
       publisher,
       publicationYear,
-      location
+      location,
+      fileUrl,
+      fileName,
+      fileSize
     });
-    
+
     res.status(201).json({
       success: true,
       message: 'Book added successfully',
