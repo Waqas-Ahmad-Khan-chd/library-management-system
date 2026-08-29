@@ -4,19 +4,28 @@ const User = require('../models/User.model');
 const { authMiddleware, roleMiddleware } = require('../middleware/auth.middleware');
 const userController = require('../controllers/user.controller');
 
-// Profile routes (authenticated users)
+// ✅ Profile routes (authenticated users)
 router.get('/profile', authMiddleware, userController.getProfile);
 router.put('/profile', authMiddleware, userController.updateProfile);
 router.put('/change-password', authMiddleware, userController.changePassword);
 
-// Get all users (Admin & Librarian only)
-router.get('/', authMiddleware, roleMiddleware('admin', 'librarian'), async (req, res) => {
+// ✅ Get all users - ALL authenticated users can see the count
+// Only returns basic info (no passwords)
+router.get('/', authMiddleware, async (req, res) => {
   try {
+    // Get all users but only return basic info
     const users = await User.find().select('-password');
+    
     res.json({
       success: true,
       count: users.length,
-      users
+      users: users.map(user => ({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        membershipId: user.membershipId
+      }))
     });
   } catch (error) {
     res.status(500).json({
@@ -26,7 +35,7 @@ router.get('/', authMiddleware, roleMiddleware('admin', 'librarian'), async (req
   }
 });
 
-// Search user by membership ID
+// ✅ Search user by membership ID (Admin & Librarian only)
 router.get('/search', authMiddleware, roleMiddleware('admin', 'librarian'), async (req, res) => {
   try {
     const { membershipId } = req.query;

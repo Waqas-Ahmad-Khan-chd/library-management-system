@@ -1,14 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { 
-  FaUser, 
-  FaSignOutAlt,
-  FaUserCog,
-  FaBookOpen,
-} from 'react-icons/fa';
-import { MdDashboard } from 'react-icons/md';
-import { HiOutlineLibrary } from 'react-icons/hi';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -25,8 +17,8 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-4 hover:opacity-80 transition">
-            <div className="w-11 h-11 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-              <HiOutlineLibrary className="text-2xl text-white" />
+            <div className="w-11 h-11 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl shadow-lg">
+              📚
             </div>
             <div>
               <span className="text-xl font-bold tracking-tight text-white">LibraryMS</span>
@@ -35,7 +27,7 @@ const Navbar = () => {
           </Link>
           
           {user ? (
-            <div className="flex items-center gap-4 md:gap-6">
+            <div className="flex items-center gap-6">
               {/* User Badge */}
               <div className="hidden lg:flex items-center gap-3 bg-white/10 px-5 py-2.5 rounded-full border border-white/5">
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-sm font-bold text-white">
@@ -46,25 +38,25 @@ const Navbar = () => {
               </div>
 
               {/* Nav Links */}
-              <div className="flex items-center gap-2 md:gap-3">
-                <Link to="/dashboard" className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
-                  <MdDashboard className="text-xl" />
+              <div className="flex items-center gap-1">
+                <Link to="/dashboard" className="flex items-center gap-2 px-4 py-2.5 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
+                  <span>📊</span>
                   <span>Dashboard</span>
                 </Link>
                 
-                <Link to="/books" className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
-                  <FaBookOpen className="text-xl" />
+                <Link to="/books" className="flex items-center gap-2 px-4 py-2.5 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
+                  <span>📚</span>
                   <span>Books</span>
                 </Link>
                 
-                <Link to="/profile" className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
-                  <FaUser className="text-xl" />
+                <Link to="/profile" className="flex items-center gap-2 px-4 py-2.5 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
+                  <span>👤</span>
                   <span>Profile</span>
                 </Link>
                 
                 {user && user.role === 'admin' && (
-                  <Link to="/admin" className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
-                    <FaUserCog className="text-xl" />
+                  <Link to="/admin" className="flex items-center gap-2 px-4 py-2.5 rounded-xl hover:bg-white/10 transition text-white/80 hover:text-white text-sm font-medium">
+                    <span>⚙️</span>
                     <span>Admin</span>
                   </Link>
                 )}
@@ -72,9 +64,9 @@ const Navbar = () => {
               
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2.5 bg-red-500/20 hover:bg-red-500/30 px-5 py-2.5 rounded-xl transition font-medium text-sm border border-red-500/20 text-white"
+                className="flex items-center gap-2 bg-red-500/20 hover:bg-red-500/30 px-5 py-2.5 rounded-xl transition font-medium text-sm border border-red-500/20 text-white"
               >
-                <FaSignOutAlt className="text-base" />
+                <span>🚪</span>
                 <span>Logout</span>
               </button>
             </div>
