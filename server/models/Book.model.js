@@ -47,19 +47,6 @@ const BookSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
-  // ✅ File upload fields
-  fileUrl: {
-    type: String,
-    default: ''
-  },
-  fileName: {
-    type: String,
-    default: ''
-  },
-  fileSize: {
-    type: Number,
-    default: 0
-  },
   image: {
     type: String,
     trim: true

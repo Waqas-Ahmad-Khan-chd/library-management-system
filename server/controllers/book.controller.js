@@ -1,6 +1,6 @@
 const Book = require('../models/Book.model');
 
-// Get all books
+// Get all books with search
 exports.getAllBooks = async (req, res) => {
   try {
     const { search, category } = req.query;
@@ -58,7 +58,7 @@ exports.getBookById = async (req, res) => {
   }
 };
 
-// Create new book with file upload
+// Create new book
 exports.createBook = async (req, res) => {
   try {
     const { title, author, isbn, category, quantity, publisher, publicationYear, location } = req.body;
@@ -71,12 +71,7 @@ exports.createBook = async (req, res) => {
         message: 'Book with this ISBN already exists'
       });
     }
-
-    // Get uploaded file info
-    const fileUrl = req.file ? `/uploads/${req.file.filename}` : '';
-    const fileName = req.file ? req.file.originalname : '';
-    const fileSize = req.file ? req.file.size : 0;
-
+    
     const book = await Book.create({
       title,
       author,
@@ -86,12 +81,9 @@ exports.createBook = async (req, res) => {
       available: quantity || 1,
       publisher,
       publicationYear,
-      location,
-      fileUrl,
-      fileName,
-      fileSize
+      location
     });
-
+    
     res.status(201).json({
       success: true,
       message: 'Book added successfully',

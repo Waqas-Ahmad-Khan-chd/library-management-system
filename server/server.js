@@ -8,13 +8,8 @@ dotenv.config();
 
 const app = express();
 
-// ✅ Basic middleware (removed helmet and rate-limit for now)
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// ✅ Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -33,10 +28,16 @@ app.get('/api/test', (req, res) => {
   res.json({ message: '✅ Library API is running!' });
 });
 
-// ✅ Serve Frontend
-const distPath = path.join(__dirname, '..', 'client', 'dist');
-console.log('📁 Serving frontend from:', distPath);
+// Debug Route
+app.get('/api/debug', (req, res) => {
+  res.json({
+    mongoUriExists: !!process.env.MONGO_URI,
+    timestamp: new Date().toISOString()
+  });
+});
 
+// Serve Frontend
+const distPath = path.join(__dirname, '..', 'client', 'dist');
 app.use(express.static(distPath));
 
 app.get('*', (req, res) => {
